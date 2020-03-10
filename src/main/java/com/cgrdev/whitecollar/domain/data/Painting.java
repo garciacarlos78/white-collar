@@ -11,7 +11,8 @@ import java.util.Date;
 @Entity
 public class Painting {
 
-    @Nullable
+    // TODO: for the moment, the painter cannot be null
+    //@Nullable
     private String painter;
     // We tell name is the PK
     @Id
@@ -26,5 +27,12 @@ public class Painting {
         this.name = name;
         this.price = price;
         this.entryDate = entryDate;
+    }
+
+    Painting (String painter, String name, double price) {
+        this.painter = painter;
+        this.name = name;
+        this.price = price;
+        this.entryDate = new Date();
     }
 }

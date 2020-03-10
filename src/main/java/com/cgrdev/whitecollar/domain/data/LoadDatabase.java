@@ -20,7 +20,20 @@ public class LoadDatabase {
             log.info("Preloading " + storeRepository.save(new Store("Store 3", 5)));
             log.info("Preloading " + storeRepository.save(new Store("Store 4", 20)));
             log.info("Preloading " + storeRepository.save(new Store("Store 5", 30)));
+            // Introduce some paintings in store 1, to test get rest
+            /*Store store = storeRepository.getOne(1L);
+            if (store==null) {
+                log.info("Store null");
+            } else {
+                log.info("Store not null");
+
+                store.addPainting(new Painting("null", "La tentación anónima", 50, new Date()));
+            }*/
+            /*storeRepository.getOne(1L).addPainting(new Painting("null", "La tentación anónima", 50, new Date()));
+            storeRepository.getOne(1L).addPainting(new Painting("Carapaggio", "La tentación de Carapaggio", 150, new Date()));
+            storeRepository.getOne(1L).addPainting(new Painting("Carapó", "La tentación de Almeida", 200, new Date()));*/
         };
+
     }
 
     // Initialize a Painting database
