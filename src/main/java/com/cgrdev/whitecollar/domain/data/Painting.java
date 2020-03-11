@@ -1,6 +1,7 @@
 package com.cgrdev.whitecollar.domain.data;
 
 import lombok.Data;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.lang.Nullable;
 
 import javax.persistence.Entity;
@@ -22,17 +23,34 @@ public class Painting {
 
     Painting() {}
 
-    Painting (String painter, String name, double price, Date entryDate) {
+    Painting (String name, String painter, double price, Date entryDate) {
         this.painter = painter;
         this.name = name;
         this.price = price;
         this.entryDate = entryDate;
     }
 
-    Painting (String painter, String name, double price) {
+    Painting (String name, String painter, double price) {
         this.painter = painter;
         this.name = name;
         this.price = price;
         this.entryDate = new Date();
+    }
+
+    // Constructor to add a painting just with name and painter name
+    Painting (String name, String painter) {
+        this.name = name;
+        this.painter = painter;
+        // The price is mandatory, we fix it to 25€ if it isn't given
+        this.price=25;
+        this.entryDate=new Date();
+    }
+
+    // Constructor to add a painting just with name (painter can be null)
+    Painting (String name) {
+        this.name = name;
+        // The price is mandatory, we fix it to 25€ if it isn't given
+        this.price=25;
+        this.entryDate=new Date();
     }
 }

@@ -7,8 +7,9 @@ import com.cgrdev.whitecollar.domain.data.StoreRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
-import java.util.Optional;
+import java.util.Set;
 
 @Slf4j
 // TODO: Is it necessary to have a PaintingController?
@@ -41,19 +42,23 @@ public class StoreController {
 
     // Add painting to a store
     @PostMapping("/shops/{id}/pictures")
-    void addPainting(@RequestBody Painting newPainting, @PathVariable Long id) {
+    boolean addPainting(@RequestBody Painting newPainting, @PathVariable Long id) {
 
         // TODO: treat case with non-existing store id
-        storeRepository.getOne(id).addPainting(paintingRepository.save(newPainting));
+//        storeRepository.getOne(id).addPainting(paintingRepository.save(newPainting));
+        newPainting.setEntryDate(new Date());
+        log.info("Painting received: " + newPainting);
+        log.info("Id received: " + id);
 
+        return storeRepository.getOne(id).getPaintings().add(paintingRepository.save(newPainting));
     }
 
     // List paintings of a store
     // TODO: check correct id
     @GetMapping("/shops/{id}/pictures")
     List<Painting> getPaintings (@PathVariable Long id) {
-        log.info("Store retrieved: " + storeRepository.getOne(id).getName());
-        log.info("Store paintings: " +storeRepository.getOne(id).getPaintings().toString());
+        /*log.info("Store retrieved: " + storeRepository.getOne(id).getName());
+        log.info("Store paintings: " +storeRepository.getOne(id).getPaintings().toString());*/
         return storeRepository.getOne(id).getPaintings();
     }
 }
