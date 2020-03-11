@@ -36,7 +36,7 @@ public class Store {
     Store (String name, int capacity) {
         this.name=name;
         this.capacity = capacity;
-        // this.paintings = new ArrayList<>(capacity);
+        //this.paintings = new ArrayList<>(capacity);
     }
 
     Store (String name, int capacity, List<Painting> paintings) {

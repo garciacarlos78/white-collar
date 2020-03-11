@@ -45,12 +45,21 @@ public class StoreController {
     boolean addPainting(@RequestBody Painting newPainting, @PathVariable Long id) {
 
         // TODO: treat case with non-existing store id
-//        storeRepository.getOne(id).addPainting(paintingRepository.save(newPainting));
         newPainting.setEntryDate(new Date());
-        log.info("Painting received: " + newPainting);
-        log.info("Id received: " + id);
+        newPainting.setPrice(50);
 
-        return storeRepository.getOne(id).getPaintings().add(paintingRepository.save(newPainting));
+        //log.info("Painting repository after insertion: " + paintingRepository.findAll().toString());
+
+        //paintingRepository.save(newPainting);
+
+        log.info("Store repository before insertion: " + storeRepository.getOne(id).getPaintings().toString());
+        storeRepository.getOne(id).getPaintings().add(paintingRepository.save(newPainting));
+        log.info("Store repository after insertion: " + storeRepository.getOne(id).getPaintings().toString());
+
+        storeRepository.flush();
+
+
+        return true;//storeRepository.getOne(id).getPaintings().add(paintingRepository.save(newPainting));
     }
 
     // List paintings of a store
