@@ -67,4 +67,20 @@ public class StoreController {
         log.info("Store paintings: " +storeRepository.getOne(id).getPaintings().toString());*/
         return storeRepository.getOne(id).getPaintings();
     }
+
+    // Delete all of the paintings of a store
+    @DeleteMapping("/shops/{id}/pictures")
+    void fire(@PathVariable Long id) {
+
+        log.info(("Painting repository size before deletion: " + paintingRepository.count()));
+        log.info(("Store list size before deletion: " + storeRepository.getOne(id).getPaintings().size()));
+
+        storeRepository.getOne(id).getPaintings().clear();
+        storeRepository.flush();
+        // TODO: probably they still are on the paintings repository
+
+        log.info(("Store list size before deletion: " + storeRepository.getOne(id).getPaintings().size()));
+        log.info(("Painting repository size after deletion: " + paintingRepository.count()));
+
+    }
 }
