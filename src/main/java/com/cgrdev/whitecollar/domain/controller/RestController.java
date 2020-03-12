@@ -60,9 +60,11 @@ public class RestController {
     // TODO: check correct id
     @GetMapping("/shops/{id}/pictures")
     List<Painting> getPaintings (@PathVariable Long id) {
-        /*log.info("Store retrieved: " + storeRepository.getOne(id).getName());
-        log.info("Store paintings: " +storeRepository.getOne(id).getPaintings().toString());*/
-        return storeRepository.getOne(id).getPaintings();
+
+        Store store = storeRepository.findById(id).orElseThrow(() ->
+                new StoreNotFoundException(id));
+
+        return store.getPaintings();
     }
 
     // Delete all of the paintings of a store

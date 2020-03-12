@@ -5,23 +5,25 @@
     - We are only asked for name and capacity, so we list just those fields (not id)
   - POST /shops/{ID}/pictures
     - The contract asks us to create a painting introducing just painting and painter name, so we assign the painting a random price. The entry date is the moment in which we make the post request.
-  - [DOUBT] I think it would have been possible not having a painting repository (we can simply have a List<Painting> in each store). Problem: we could have then repeated paintings, the same painting in two different stores. I think then it forces to have also a painting repository.
-  
+    
 # Doubts
+##Painting repository, is it really necessary?
+I think it would have been possible not having a painting repository (we can simply have a List<Painting> in each store). Problem: we could have then repeated paintings, the same painting in two different stores. I think then it forces to have also a painting repository.
 
 ##LoadDatabase.java
+###application.properties
 In order to be able to preload data, I've had to add the following line in *application.properties*:
-`spring.jpa.properties.hibernate.enable_lazy_load_no_trans=true`
-Is it correct or it is a dirty workaround? Is there a more elegant solution?
+`spring.jpa.properties.hibernate.enable_lazy_load_no_trans=true`  
+Is it the right way or is it just a dirty workaround? Is there a more elegant solution?  
 Error obtained without that property:  
 `java.lang.IllegalStateException: Failed to execute CommandLineRunner
-[...]  
-Caused by: org.hibernate.LazyInitializationException: could not initialize proxy [com.cgrdev.whitecollar.domain.data.Store#1] - no Session
+[...]`    
+`Caused by: org.hibernate.LazyInitializationException: could not initialize proxy [com.cgrdev.whitecollar.domain.data.Store#1] - no Session
 	at org.hibernate.proxy.AbstractLazyInitializer.initialize(AbstractLazyInitializer.java:170) ~[hibernate-core-5.4.12.Final.jar:5.4.12.Final]...`
 
-LoadData: adding paintings to the stores just in Store creation.
+###LoadData: adding paintings to the stores only possible in Store creation.
 
-The only way I've had to preload paintings into the stores has been to create List<Painting> and add them to the stores at creation time.  
+The only way I've had to preload paintings into the stores has been to create a List\<Painting> and add them to the stores at store creation time.  
   `[Create List<Painting>]`  
   `storeRepository.save(new Store("Store 4", 6, List<Painting>));`
   
@@ -31,7 +33,7 @@ If I create the store before, and then try adding paintings one by one, the pain
 
 If I insert the paintings in the repository before, then create the store, and then try adding paintings one by one from the painting repository, the paintings are not added.  
   `[Add paintings to Painting repository]`  
-  `storeRepository.save(new Store("Store 4", 6));`
+  `storeRepository.save(new Store("Store 4", 6));`  
   `storeRepository.getOne(4L).getPaintings().add(paintingRepository.getOne(<idPainting>));`
   
 If I create the store before, and then tried setting the List<Painting>, the paintings are not added.  
@@ -41,5 +43,5 @@ If I create the store before, and then tried setting the List<Painting>, the pai
 
 ##RestController.java
 
-  - When a new painting is "posted", I create the new date in RestController.java. Is there some way to create it with an annotation? The idea is an annotation indicating that the default value is `new Date()`. 
+  - When a new painting is "posted", I create the new date in RestController.java. Is there some way to create it via an annotation? The idea is an annotation indicating that the default value is `new Date()`. 
     

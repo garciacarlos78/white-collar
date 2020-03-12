@@ -17,7 +17,7 @@ public class Painting {
     // TODO: for the moment, the painter cannot be null
     //@Nullable
     private String painter;
-    // We tell name is the PK
+    // Indicate name as PK
     @Id
     private String name;
     private double price;
@@ -32,35 +32,11 @@ public class Painting {
         this.entryDate = entryDate;
     }
 
+    // If we don't provide a painter name the painter name is anonymous
     Painting (String name, double price, Date entryDate) {
         this.painter = ANONYMOUS_PAINTER;
         this.name = name;
         this.price = price;
         this.entryDate = entryDate;
-    }
-
-    Painting (String name, String painter, double price) {
-        this.painter = painter;
-        this.name = name;
-        this.price = price;
-        this.entryDate = new Date();
-    }
-
-    // Constructor to add a painting just with name and painter name
-    Painting (String name, String painter) {
-        this.name = name;
-        this.painter = painter;
-        // The price is mandatory, we fix it to 25€ if it isn't given
-        this.price=25;
-        this.entryDate=new Date();
-    }
-
-    // Constructor to add a painting just with name (painter can be null)
-    Painting (String name) {
-        this.name = name;
-        this.painter = ANONYMOUS_PAINTER;
-        // The price is mandatory, we fix it to 25€ if it isn't given
-        this.price=25;
-        this.entryDate=new Date();
     }
 }
