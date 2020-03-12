@@ -42,7 +42,9 @@ public class RestController {
     @PostMapping("/shops/{id}/pictures")
     void addPainting(@RequestBody Painting newPainting, @PathVariable Long id) {
 
-        // TODO: treat case with non-existing store id
+        // Check if the given store id exists
+        Store store = storeRepository.findById(id).orElseThrow(() ->
+                new StoreNotFoundException(id));
 
         newPainting.setEntryDate(new Date());
         // By contract, we must provide just author and painting name
@@ -50,17 +52,17 @@ public class RestController {
         // Library DoubleRounder added to pom.xml to round price to just 2 decimals
         newPainting.setPrice(DoubleRounder.round(Math.random()*1000000, 2));
 
-        storeRepository.getOne(id).getPaintings().add(paintingRepository.save(newPainting));
+        store.getPaintings().add(paintingRepository.save(newPainting));
 
         // Necessary to persist the changes
         storeRepository.flush();
     }
 
     // List paintings of a store
-    // TODO: check correct id
     @GetMapping("/shops/{id}/pictures")
     List<Painting> getPaintings (@PathVariable Long id) {
 
+        // Check if the given store id exists
         Store store = storeRepository.findById(id).orElseThrow(() ->
                 new StoreNotFoundException(id));
 
