@@ -3,6 +3,7 @@ package com.cgrdev.whitecollar.domain.data;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -16,7 +17,6 @@ import java.util.List;
 @JsonIgnoreProperties(value = { "paintings", "id" })
 public class Store {
 
-    // We tell name is the PK
     @Id @GeneratedValue
     private Long id;
     private String name;
@@ -36,7 +36,7 @@ public class Store {
     Store (String name, int capacity) {
         this.name=name;
         this.capacity = capacity;
-        //this.paintings = new ArrayList<>(capacity);
+        this.paintings = new ArrayList<>(capacity);
     }
 
     Store (String name, int capacity, List<Painting> paintings) {

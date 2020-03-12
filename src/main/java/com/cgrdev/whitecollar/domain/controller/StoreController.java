@@ -18,7 +18,6 @@ public class StoreController {
     private final StoreRepository storeRepository;
     private final PaintingRepository paintingRepository;
 
-
     StoreController(StoreRepository storeRepository, PaintingRepository paintingRepository) {
         this.storeRepository=storeRepository;
         this.paintingRepository = paintingRepository;

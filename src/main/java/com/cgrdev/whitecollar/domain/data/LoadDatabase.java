@@ -1,66 +1,60 @@
 package com.cgrdev.whitecollar.domain.data;
 
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.Hibernate;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Configuration
 @Slf4j
 public class LoadDatabase {
 
-    // Initialize a Store database with 5 stores
+    // Initialize the Painting repository and the Store repository, adding some paintings, stores, and paintings to the stores
     @Bean
     CommandLineRunner initDatabaseStores(StoreRepository storeRepository, PaintingRepository paintingRepository) {
         return args -> {
-            log.info("Preloading " + storeRepository.save(new Store("Store 1", 10)));
-            //log.info("Preloading " + storeRepository.save(new Store("Store 2", 15, paintingRepository.save(new Painting("Painting 1", "Carapaggio"))))));
-            // Add some paintings to store id 1
-            log.info("Preloading " + storeRepository.save(new Store("Store 2", 60)));
-            log.info("Preloading " + storeRepository.save(new Store("Store 3", 5)));
-            log.info("Preloading " + storeRepository.save(new Store("Store 4", 20)));
-            log.info("Preloading " + storeRepository.save(new Store("Store 5", 30)));
 
-            log.info("Preloading " + paintingRepository.save(new Painting("Painter 1", "Painting name 1", 50, new Date())));
-            log.info("Preloading " + paintingRepository.save(new Painting("Painting name 2", "Painting name 2", 450, new Date())));
-            log.info("Preloading " + paintingRepository.save(new Painting("Painter 3", "Painting name 3", 500, new Date())));
-            log.info("Preloading " + paintingRepository.save(new Painting("Painter 4", "Painting name 4", 2.50, new Date())));
-            log.info("Preloading " + paintingRepository.save(new Painting("Painter 1", "Painting name 5", 30.50, new Date())));
+            // Create paintings for store 1, and create store 1 adding the paintings
+            log.info("Preloading " + paintingRepository.save(new Painting("Painting 1", "Painter 1", 45, new Date())));
+            log.info("Preloading " + paintingRepository.save(new Painting("Painting 2", "Painter 2", 450, new Date())));
+            log.info("Preloading " + paintingRepository.save(new Painting("Painting 3", "Painter 3", 50, new Date())));
+            log.info("Preloading " + paintingRepository.save(new Painting("Painting 4", "Painter 4", 5000, new Date())));
+            log.info("Preloading " + paintingRepository.save(new Painting("Painting 5", "Painter 5", 0.99, new Date())));
 
-            log.info("Preloading " + storeRepository.save(new Store("Store 6", 30, paintingRepository.findAll())));
+            log.info("Preloading " + storeRepository.save(new Store("Store 1", 60, paintingRepository.findAll())));
 
+            // Create paintings for store 2, and create store 2 adding the paintings
+            List<Painting> paintings = new ArrayList<>();
+            paintings.add(paintingRepository.save(new Painting("Painting 6", "Painter 1", 41.99, new Date())));
+            paintings.add(paintingRepository.save(new Painting("Painting 7", 450, new Date())));
+            paintings.add(paintingRepository.save(new Painting("Painting 8", "Painter 3", 4500, new Date())));
+            paintings.add(paintingRepository.save(new Painting("Painting 9", "Painter 5", 0.99, new Date())));
 
-            // log.info(("Preloaded: " + storeRepository.findAll()));
-            // Introduce some paintings in store 1, to test get rest
-            /*Store store = storeRepository.getOne(1L);
-            if (store==null) {
-                log.info("Store null");
-            } else {
-                log.info("Store not null");
+            log.info("Preloading " + storeRepository.save(new Store("Store 2", 10, paintings)));
 
-                store.addPainting(new Painting("null", "La tentación anónima", 50, new Date()));
-            }*/
-            /*storeRepository.getOne(1L).addPainting(new Painting("null", "La tentación anónima", 50, new Date()));
-            storeRepository.getOne(1L).addPainting(new Painting("Carapaggio", "La tentación de Carapaggio", 150, new Date()));
-            storeRepository.getOne(1L).addPainting(new Painting("Carapó", "La tentación de Almeida", 200, new Date()));*/
-        };
+            // Create paintings for store 3, and create store 3 adding the paintings
+            paintings.clear();
+            paintings.add(paintingRepository.save(new Painting("Painting 10", "Painter 1", 234.41, new Date())));
+            paintings.add(paintingRepository.save(new Painting("Painting 11", 4500, new Date())));
+            paintings.add(paintingRepository.save(new Painting("Painting 12", "Painter 3", 44999.99, new Date())));
+            paintings.add(paintingRepository.save(new Painting("Painting 13", "Painter 5", 0.49, new Date())));
 
-    }
+            log.info("Preloading " + storeRepository.save(new Store("Store 3", 45, paintings)));
 
-    // Initialize a Painting database
-    // TODO: (to ask): a repository for the whole application or a repository for each store?
-/*
-    @Bean
-    CommandLineRunner initDatabasePaintings(PaintingRepository paintingRepository) {
-        return args -> {
-            log.info("Preloading " + paintingRepository.save(new Painting("Painter 1", "Painting name 1", 50, new Date())));
-            log.info("Preloading " + paintingRepository.save(new Painting("Painting name 2", "Painting name 2", 450, new Date())));
-            log.info("Preloading " + paintingRepository.save(new Painting("Painter 3", "Painting name 3", 500, new Date())));
-            log.info("Preloading " + paintingRepository.save(new Painting("Painter 4", "Painting name 4", 2.50, new Date())));
-            log.info("Preloading " + paintingRepository.save(new Painting("Painter 1", "Painting name 5", 30.50, new Date())));
+            // Create paintings for store 4, and create store 4 adding the paintings
+            paintings.clear();
+            paintings.add(paintingRepository.save(new Painting("Painting 14", "Painter 1", 234.41, new Date())));
+            paintings.add(paintingRepository.save(new Painting("Painting 15", 4500, new Date())));
+            paintings.add(paintingRepository.save(new Painting("Painting 16", "Painter 3", 44999.99, new Date())));
+            paintings.add(paintingRepository.save(new Painting("Painting 17", "Painter 5", 0.49, new Date())));
+
+            log.info("Preloading " + storeRepository.save(new Store("Store 4", 6, paintings)));
+
         };
     }
-*/
 }
