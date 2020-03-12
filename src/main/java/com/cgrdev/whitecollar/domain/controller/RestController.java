@@ -5,20 +5,21 @@ import com.cgrdev.whitecollar.domain.data.PaintingRepository;
 import com.cgrdev.whitecollar.domain.data.Store;
 import com.cgrdev.whitecollar.domain.data.StoreRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.decimal4j.util.DoubleRounder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 @Slf4j
-// TODO: Is it necessary to have a PaintingController?
-@RestController
-public class StoreController {
+@org.springframework.web.bind.annotation.RestController
+public class RestController {
 
     private final StoreRepository storeRepository;
     private final PaintingRepository paintingRepository;
 
-    StoreController(StoreRepository storeRepository, PaintingRepository paintingRepository) {
+    RestController(StoreRepository storeRepository, PaintingRepository paintingRepository) {
         this.storeRepository=storeRepository;
         this.paintingRepository = paintingRepository;
     }
@@ -26,7 +27,6 @@ public class StoreController {
     // Aggregate root
 
     // Get stores list
-    // Returned JSON list: {"name", "}
     @GetMapping("/shops/")
     List<Store> all() {
         return storeRepository.findAll();
@@ -43,16 +43,14 @@ public class StoreController {
     void addPainting(@RequestBody Painting newPainting, @PathVariable Long id) {
 
         // TODO: treat case with non-existing store id
+
         newPainting.setEntryDate(new Date());
-        newPainting.setPrice(50);
+        // By contract, we must provide just author and painting name
+        // Also by contract, price is mandatory, so we assign each painting a random price from 0 to 1M€
+        // Library DoubleRounder added to pom.xml to round price to just 2 decimals
+        newPainting.setPrice(DoubleRounder.round(Math.random()*1000000, 2));
 
-        //log.info("Painting repository after insertion: " + paintingRepository.findAll().toString());
-
-        //paintingRepository.save(newPainting);
-
-        log.info("Store repository before insertion: " + storeRepository.getOne(id).getPaintings().toString());
         storeRepository.getOne(id).getPaintings().add(paintingRepository.save(newPainting));
-        log.info("Store repository after insertion: " + storeRepository.getOne(id).getPaintings().toString());
 
         // Necessary to persist the changes
         storeRepository.flush();
@@ -71,15 +69,27 @@ public class StoreController {
     @DeleteMapping("/shops/{id}/pictures")
     void fire(@PathVariable Long id) {
 
-        log.info(("Painting repository size before deletion: " + paintingRepository.count()));
-        log.info(("Store list size before deletion: " + storeRepository.getOne(id).getPaintings().size()));
+        // We cannot delete the paintings from the painting repository if they're still associated with the store
+        // To avoid this, we need to:
+        // 1- Create a copy of the list of paintings to fire
+        // 2- Empty the list from the store
+        // 3- Empty the list from the repository
+        // If we didn't want to delete them also from painting repository, just from store stock, it's enough to run
+        // the commands that start with store.Repository.
 
+        List<Painting> paintings = new ArrayList<>(storeRepository.getOne(id).getPaintings());
         storeRepository.getOne(id).getPaintings().clear();
+        // Needed to persist the changes
         storeRepository.flush();
-        // TODO: probably they still are on the paintings repository
+        fireRepository(paintings);
 
-        log.info(("Store list size before deletion: " + storeRepository.getOne(id).getPaintings().size()));
-        log.info(("Painting repository size after deletion: " + paintingRepository.count()));
+    }
 
+    // Delete list of paintings from painting repository
+    private void fireRepository(List<Painting> paintings) {
+        for (Painting p :
+                paintings) {
+            paintingRepository.delete(p);
+        }
     }
 }

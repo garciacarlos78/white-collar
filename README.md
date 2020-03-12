@@ -9,6 +9,7 @@
   
 # Doubts
 
+##LoadDatabase.java
 In order to be able to preload data, I've had to add the following line in *application.properties*:
 `spring.jpa.properties.hibernate.enable_lazy_load_no_trans=true`
 Is it correct or it is a dirty workaround? Is there a more elegant solution?
@@ -38,4 +39,7 @@ If I create the store before, and then tried setting the List<Painting>, the pai
   `storeRepository.save(new Store("Store 4", 6));`  
   `storeRepository.getOne(4L).setPaintings(paintings);`
 
+##RestController.java
+
+  - When a new painting is "posted", I create the new date in RestController.java. Is there some way to create it with an annotation? The idea is an annotation indicating that the default value is `new Date()`. 
     
