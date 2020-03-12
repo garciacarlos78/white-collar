@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 @Slf4j
 // TODO: Is it necessary to have a PaintingController?
@@ -42,7 +41,7 @@ public class StoreController {
 
     // Add painting to a store
     @PostMapping("/shops/{id}/pictures")
-    boolean addPainting(@RequestBody Painting newPainting, @PathVariable Long id) {
+    void addPainting(@RequestBody Painting newPainting, @PathVariable Long id) {
 
         // TODO: treat case with non-existing store id
         newPainting.setEntryDate(new Date());
@@ -56,10 +55,8 @@ public class StoreController {
         storeRepository.getOne(id).getPaintings().add(paintingRepository.save(newPainting));
         log.info("Store repository after insertion: " + storeRepository.getOne(id).getPaintings().toString());
 
+        // Necessary to persist the changes
         storeRepository.flush();
-
-
-        return true;//storeRepository.getOne(id).getPaintings().add(paintingRepository.save(newPainting));
     }
 
     // List paintings of a store
