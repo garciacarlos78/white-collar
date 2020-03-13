@@ -47,7 +47,7 @@ If I create the store before, and then tried setting the List<Painting>, the pai
 
 ## RestController.java
 
-  - When a new painting is "posted", I create the new date in RestController.java. Is there any way to create it via an annotation? The idea is an annotation indicating that the default value is `new Date()`. 
+When a new painting is "posted", I create the new date in RestController.java. Is there any way to create it via an annotation? The idea is an annotation indicating that the default value is `new Date()`. 
 
 ## DuplicateStoreAdvice
 
