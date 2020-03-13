@@ -1,4 +1,4 @@
-# IT Academy "White collar" exercise
+# BCN IT Academy White Collar exercise
 Run the project as Spring Boot App in your favourite IDE and access http://localhost:8080 in your favourite web browser.  
 Lombok plugin is necessary to be installed in the IDE.
 
