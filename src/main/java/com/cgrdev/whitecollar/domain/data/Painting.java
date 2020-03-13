@@ -12,10 +12,8 @@ import java.util.Date;
 @Entity
 public class Painting {
 
-    private static final String ANONYMOUS_PAINTER="Anonymous";
+    public static final String ANONYMOUS_PAINTER="Anonymous";
 
-    // TODO: for the moment, the painter cannot be null
-    //@Nullable
     private String painter;
     // Indicate name as PK
     @Id

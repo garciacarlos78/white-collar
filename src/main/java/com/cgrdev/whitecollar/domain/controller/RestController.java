@@ -40,22 +40,30 @@ public class RestController {
 
     // Add painting to a store
     @PostMapping("/shops/{id}/pictures")
-    void addPainting(@RequestBody Painting newPainting, @PathVariable Long id) {
+    boolean addPainting(@RequestBody Painting newPainting, @PathVariable Long id) {
 
         // Check if the given store id exists
         Store store = storeRepository.findById(id).orElseThrow(() ->
                 new StoreNotFoundException(id));
+
+        // Check if the given painting name already exists
+        if (paintingRepository.findById(newPainting.getName()).isPresent())
+            throw new DuplicateSoreException(newPainting.getName());
 
         newPainting.setEntryDate(new Date());
         // By contract, we must provide just author and painting name
         // Also by contract, price is mandatory, so we assign each painting a random price from 0 to 1M€
         // Library DoubleRounder added to pom.xml to round price to just 2 decimals
         newPainting.setPrice(DoubleRounder.round(Math.random()*1000000, 2));
+        // Check if the introduced painting has no painter name, and set it to anonymous in case it hasn't
+        if (newPainting.getPainter().isEmpty()) newPainting.setPainter(Painting.ANONYMOUS_PAINTER);
 
         store.getPaintings().add(paintingRepository.save(newPainting));
 
         // Necessary to persist the changes
         storeRepository.flush();
+
+        return true;
     }
 
     // List paintings of a store
@@ -73,6 +81,10 @@ public class RestController {
     @DeleteMapping("/shops/{id}/pictures")
     void fire(@PathVariable Long id) {
 
+        // Check if the given store id exists
+        Store store = storeRepository.findById(id).orElseThrow(() ->
+                new StoreNotFoundException(id));
+
         // We cannot delete the paintings from the painting repository if they're still associated with the store
         // To avoid this, we need to:
         // 1- Create a copy of the list of paintings to fire
@@ -86,7 +98,6 @@ public class RestController {
         // Needed to persist the changes
         storeRepository.flush();
         fireRepository(paintings);
-
     }
 
     // Delete list of paintings from painting repository

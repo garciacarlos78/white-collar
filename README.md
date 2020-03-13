@@ -44,4 +44,7 @@ If I create the store before, and then tried setting the List<Painting>, the pai
 ##RestController.java
 
   - When a new painting is "posted", I create the new date in RestController.java. Is there some way to create it via an annotation? The idea is an annotation indicating that the default value is `new Date()`. 
-    
+
+##DuplicateStoreAdvice
+
+Which HttpStatus code should be used when trying to add a duplicate Id painting? I've chosen `HttpStatus.CONFLICT`, which seemed to me the more appropriate, but I don't know if it might be any more appropriate status.     
