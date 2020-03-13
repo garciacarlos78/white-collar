@@ -1,7 +1,6 @@
 package com.cgrdev.whitecollar.domain.data;
 
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.Hibernate;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -54,7 +53,6 @@ public class LoadDatabase {
             paintings.add(paintingRepository.save(new Painting("Painting 17", "Painter 5", 0.49, new Date())));
 
             log.info("Preloading " + storeRepository.save(new Store("Store 4", 6, paintings)));
-
         };
     }
 }

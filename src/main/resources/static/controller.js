@@ -18,7 +18,7 @@ $(document).ready(function () {
             var url="/shops/" + $('#id_one').val() + "/pictures";
             $.get(url,
             function(paintings) {
-                if (jQuery.isEmptyObject(paintings)) {
+                if ($.isEmptyObject(paintings)) {
                     $('#result_get_one').append("Paintings? Which paintings? This is a respectable collars shop.<br>");
                 } else {
                 $.each(paintings, function(i, painting) {

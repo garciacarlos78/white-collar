@@ -50,6 +50,7 @@ public class RestController {
         if (paintingRepository.findById(newPainting.getName()).isPresent())
             throw new DuplicateSoreException(newPainting.getName());
 
+        // Add current date as entry date
         newPainting.setEntryDate(new Date());
         // By contract, we must provide just author and painting name
         // Also by contract, price is mandatory, so we assign each painting a random price from 0 to 1M€
@@ -58,6 +59,7 @@ public class RestController {
         // Check if the introduced painting has no painter name, and set it to anonymous in case it hasn't
         if (newPainting.getPainter().isEmpty()) newPainting.setPainter(Painting.ANONYMOUS_PAINTER);
 
+        // Add painting to the painting repository and to the store
         store.getPaintings().add(paintingRepository.save(newPainting));
 
         // Necessary to persist the changes
@@ -90,8 +92,7 @@ public class RestController {
         // 1- Create a copy of the list of paintings to fire
         // 2- Empty the list from the store
         // 3- Empty the list from the repository
-        // If we didn't want to delete them also from painting repository, just from store stock, it's enough to run
-        // the commands that start with store.Repository.
+        // If we didn't want to delete them also from painting repository, just from store stock, it's enough to run the commands that start with store.Repository.
 
         List<Painting> paintings = new ArrayList<>(storeRepository.getOne(id).getPaintings());
         storeRepository.getOne(id).getPaintings().clear();

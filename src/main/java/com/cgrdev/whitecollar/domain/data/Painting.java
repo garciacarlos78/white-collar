@@ -1,8 +1,6 @@
 package com.cgrdev.whitecollar.domain.data;
 
 import lombok.Data;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.lang.Nullable;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
